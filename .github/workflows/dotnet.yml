@@ -41,7 +41,7 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        application_name: construfind-api
+        application_name: api-construfind
         environment_name: Apiconstrufind-env
         region: sa-east-1
         version_label: ${{ github.run_id }}
