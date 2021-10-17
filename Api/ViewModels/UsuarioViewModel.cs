@@ -22,11 +22,9 @@ namespace ConstruFindAPI.API.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [EmailAddress(ErrorMessage = "O campo {0} está em um formato inválido")]
         public string Telefone { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [EmailAddress(ErrorMessage = "O campo {0} está em um formato inválido")]
         public TipoUsuario TipoUsuario { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
