@@ -24,11 +24,13 @@ namespace ConstruFindAPI.API.Configuration
             services.TryAddSingleton<ISystemClock, SystemClock>();
 
             //Identity support
-            services.AddDefaultIdentity<Usuario>()
-                .AddRoles<IdentityRole>()
-                .AddErrorDescriber<IdentityMessagesTranslate>()
-                .AddEntityFrameworkStores<ConstrufindContext>()
-                .AddDefaultTokenProviders();
+            services.AddIdentity<Usuario, IdentityRole>(p => 
+            {
+                p.User.RequireUniqueEmail = true;
+            })
+            .AddEntityFrameworkStores<ConstrufindContext>()
+            .AddErrorDescriber<IdentityMessagesTranslate>()
+            .AddDefaultTokenProviders();
 
             //AppSettings
             var appSettingsSection = configuration.GetSection("JWTConfig");

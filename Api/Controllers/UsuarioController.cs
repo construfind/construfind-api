@@ -50,8 +50,6 @@ namespace ConstruFindAPI.API.Controllers
                 Endereco = userCreateModel.Endereco,
                 TipoUsuario = userCreateModel.TipoUsuario,
                 EmailConfirmed = true,
-                PhoneNumberConfirmed = true,
-                TwoFactorEnabled = false
             };
 
             var res = await _userManager.CreateAsync(user, userCreateModel.Senha);
