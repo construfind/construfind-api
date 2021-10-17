@@ -26,7 +26,7 @@ jobs:
         run: dotnet tool update dotnet-ef -g
           
       - name: Rodar Migrations
-        run:  cd $(System.DefaultWorkingDirectory)/_api-digital-flash/api-digital-flash/project-unbuild/s/Data;
+        run:  cd ./Data;
               dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
       
       - name: Build with dotnet
