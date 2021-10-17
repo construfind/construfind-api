@@ -13,7 +13,15 @@ jobs:
   database-migrations:
     runs-on: windows-latest
     
-    steps:   
+    steps:      
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          include-prerelease: true 
+          
       - name: Instalar "EF Tool"
         run: dotnet tool update dotnet-ef -g
           
