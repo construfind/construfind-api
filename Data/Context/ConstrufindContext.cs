@@ -1,4 +1,5 @@
 
+using ConstruFindAPI.Business.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +14,7 @@ namespace ConstruFindAPI.Data.Context
         {
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("Identity");
-            builder.Entity<IdentityUser>(entity =>
+            builder.Entity<Usuario>(entity =>
             {
                 entity.ToTable(name: "User");
             });
@@ -40,6 +41,23 @@ namespace ConstruFindAPI.Data.Context
             builder.Entity<IdentityUserToken<string>>(entity =>
             {
                 entity.ToTable("UserTokens");
+            });
+
+            builder.Entity<Endereco>(entity =>
+            {
+                entity.ToTable("Enderecos");
+            });
+            builder.Entity<Bairro>(entity =>
+            {
+                entity.ToTable("Bairros");
+            });
+            builder.Entity<Cidade>(entity =>
+            {
+                entity.ToTable("Cidades");
+            });
+            builder.Entity<Estado>(entity =>
+            {
+                entity.ToTable("Estados");
             });
         }
     }
