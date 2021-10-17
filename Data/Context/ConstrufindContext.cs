@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ConstruFindAPI.Data.Context
 {
     public class ConstrufindContext : IdentityDbContext
-    {        
+    {
         public ConstrufindContext(DbContextOptions<ConstrufindContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)

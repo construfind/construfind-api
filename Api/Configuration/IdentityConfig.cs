@@ -1,17 +1,15 @@
-﻿using ConstruFindAPI.Data.Context;
+﻿using ConstruFindAPI.API.Configuration.Extensions;
+using ConstruFindAPI.Data.Context;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using ConstruFindAPI.API.Configuration.Extensions;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using ConstruFindAPI.Business.Models;
-using ConstruFindAPI.Configuration.Extensions;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace ConstruFindAPI.API.Configuration
 {

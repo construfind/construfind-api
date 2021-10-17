@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ConstruFindAPI.API.Configuration.Extensions
+﻿namespace ConstruFindAPI.API.Configuration.Extensions
 {
     public class AppSettings
     {

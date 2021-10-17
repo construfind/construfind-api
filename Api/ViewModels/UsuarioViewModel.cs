@@ -1,9 +1,8 @@
 using ConstruFindAPI.API.ViewModels.CustomValidators;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using ConstruFindAPI.Business.Enums;
 using ConstruFindAPI.Business.Models;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace ConstruFindAPI.API.ViewModels
 {

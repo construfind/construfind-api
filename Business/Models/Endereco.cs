@@ -1,15 +1,14 @@
-using ConstruFindAPI.Business.Enums;
 using System;
-using System.ComponentModel.DataAnnotations;
 
-namespace ConstruFindAPI.Business.Models{
+namespace ConstruFindAPI.Business.Models
+{
     public class Endereco : Bairro
     {
         public Guid codigoEndereco { get; set; } = Guid.NewGuid();
         public string numeroEndereco { get; set; }
         public string nomeLogradouro { get; set; }
         public string codigoCEP { get; set; }
-        public string bairroEndereco { get; set; }    
+        public string bairroEndereco { get; set; }
     }
 
     public class Bairro : Cidade

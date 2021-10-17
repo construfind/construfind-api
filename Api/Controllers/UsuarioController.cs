@@ -1,7 +1,6 @@
-﻿using ConstruFindAPI.API.ViewModels;
+﻿using ConstruFindAPI.API.Configuration.Extensions;
+using ConstruFindAPI.API.ViewModels;
 using ConstruFindAPI.Business.Models;
-using ConstruFindAPI.API.Configuration.Extensions;
-using ConstruFindAPI.API.Controllers;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
