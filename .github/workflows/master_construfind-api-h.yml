@@ -23,16 +23,12 @@ jobs:
           include-prerelease: true
       
       - name: Instalar "EF Tool"
-        uses: actions/github-script@v5.0.0
-        with:
-          script: dotnet tool update dotnet-ef -g
+        run: dotnet tool update dotnet-ef -g
           
       - name: Rodar Migrations
-        uses: actions/github-script@v5.0.0
-        with:
-          script: set PATH=%PATH%;$(USERPROFILE)/.dotnet/tools;
-                  cd $(System.DefaultWorkingDirectory)/_api-digital-flash/api-digital-flash/project-unbuild/s/Data;
-                  dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
+        run:  set PATH=%PATH%;$(USERPROFILE)/.dotnet/tools;
+              cd $(System.DefaultWorkingDirectory)/_api-digital-flash/api-digital-flash/project-unbuild/s/Data;
+              dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
       
       - name: Build with dotnet
         run: dotnet build --configuration Release
