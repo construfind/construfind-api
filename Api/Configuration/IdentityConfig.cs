@@ -1,4 +1,5 @@
 ﻿using ConstruFindAPI.API.Configuration.Extensions;
+using ConstruFindAPI.Business.Models;
 using ConstruFindAPI.Data.Context;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -23,7 +24,7 @@ namespace ConstruFindAPI.API.Configuration
             services.TryAddSingleton<ISystemClock, SystemClock>();
 
             //Identity support
-            services.AddDefaultIdentity<IdentityUser>()
+            services.AddDefaultIdentity<Usuario>()
                 .AddRoles<IdentityRole>()
                 .AddErrorDescriber<IdentityMessagesTranslate>()
                 .AddEntityFrameworkStores<ConstrufindContext>()
