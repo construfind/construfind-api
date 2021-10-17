@@ -1,34 +1,34 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - construfind-api-d
+name: Build and deploy ASP.Net Core app to Azure Web App - construfind-api-h
 
 on:
   push:
     branches:
-      - dev
+      - master
   workflow_dispatch:
 
 jobs:
   database-migrations:
     runs-on: windows-latest
     
-    steps:      
+    steps:  
       - uses: actions/checkout@v2
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '5.0.x'
-          include-prerelease: true 
+          include-prerelease: true
           
       - name: Instalar "EF Tool"
         run: dotnet tool update dotnet-ef -g
           
       - name: Rodar Migrations
         run:  cd ./Data;
-              dotnet ef database update --connection "Data Source=construfind-data-d.database.windows.net;Initial Catalog=construfindd;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
-  
+              dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
+
   build:
     runs-on: windows-latest
 
@@ -40,7 +40,7 @@ jobs:
         with:
           dotnet-version: '5.0.x'
           include-prerelease: true
-
+          
       - name: Build with dotnet
         run: dotnet build --configuration Release
 
@@ -70,7 +70,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'construfind-api-d'
+          app-name: 'construfind-api-h'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_CC9418F3DAEB4674A9A793CEBE1360CF }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A9A7883D1C14588BB07A484CF98D45F }}
           package: .
