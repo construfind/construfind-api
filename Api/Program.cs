@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace construfind_api
+namespace ConstruFindAPI.API
 {
     public class Program
     {
