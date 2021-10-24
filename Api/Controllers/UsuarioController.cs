@@ -47,7 +47,31 @@ namespace ConstruFindAPI.API.Controllers
                 Documento = userCreateModel.Documento,
                 DataCriacao = DateTime.Now,
                 DataUltimoAcesso = DateTime.Now,
-                Endereco = userCreateModel.Endereco,
+                Endereco = new Endereco
+                {
+                    codigoEndereco = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                    numeroEndereco = "127",
+                    nomeLogradouro = "Rua 10",
+                    codigoCEP = "11346-400",
+                    bairroEndereco = new Bairro
+                    {
+                        codigoBairro = Guid.Parse("3fa85f64-5717-4562-b3fc-2c9c9d26afa6"),
+                        nomeBairro = "Vila Nova São Vicente",
+                        cidadeBairro = new Cidade
+                        {
+                            codigoCidade = Guid.Parse("3fvb7f64-5717-4562-b3fc-2c963f66afa6"),
+                            nomeCidade = "São Vicente",
+                            estadoCidade = new Estado
+                            {
+                                codigoEstado = Guid.Parse("3fa85f64-5717-4562-b3fc-21q23f66afa6"),
+                                nomeEstado = "São Paulo",
+                                Sigla = "SP"
+                            }
+                        }
+                    }
+
+                    
+                },
                 TipoUsuario = userCreateModel.TipoUsuario,
                 EmailConfirmed = true,
             };
