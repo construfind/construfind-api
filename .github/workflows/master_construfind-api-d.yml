@@ -27,7 +27,7 @@ jobs:
           
       - name: Rodar Migrations
         run:  cd ./Data;
-              dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
+              dotnet ef database update --connection "Data Source=construfind-data-d.database.windows.net;Initial Catalog=construfindd;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
 
   build:
     runs-on: windows-latest
@@ -42,10 +42,10 @@ jobs:
           include-prerelease: true
           
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Debug
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Debug -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -57,7 +57,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -70,7 +70,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'construfind-api-h'
-          slot-name: 'Production'
+          app-name: 'construfind-api-d'
+          slot-name: 'Development'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A9A7883D1C14588BB07A484CF98D45F }}
           package: .
