@@ -49,21 +49,21 @@ namespace ConstruFindAPI.API.Controllers
                 DataUltimoAcesso = DateTime.Now,
                 Endereco = new Endereco
                 {
-                    codigoEndereco = Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"),
+                    codigoEndereco = Guid.NewGuid(),
                     numeroEndereco = "127",
                     nomeLogradouro = "Rua 10",
                     codigoCEP = "11346-400",
                     bairroEndereco = new Bairro
                     {
-                        codigoBairro = Guid.Parse("3fa85f64-5717-4562-b3fc-2c9c9d26afa6"),
+                        codigoBairro = Guid.NewGuid(),
                         nomeBairro = "Vila Nova São Vicente",
                         cidadeBairro = new Cidade
                         {
-                            codigoCidade = Guid.Parse("3fvb7f64-5717-4562-b3fc-2c963f66afa6"),
+                            codigoCidade = Guid.NewGuid(),
                             nomeCidade = "São Vicente",
                             estadoCidade = new Estado
                             {
-                                codigoEstado = Guid.Parse("3fa85f64-5717-4562-b3fc-21q23f66afa6"),
+                                codigoEstado = Guid.NewGuid(),
                                 nomeEstado = "São Paulo",
                                 Sigla = "SP"
                             }
