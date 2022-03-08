@@ -1,4 +1,5 @@
-﻿using ConstruFindAPI.API.Configuration.Extensions;
+﻿using Business.Utils;
+using ConstruFindAPI.API.Configuration.Extensions;
 using ConstruFindAPI.API.ViewModels;
 using ConstruFindAPI.Business.Models;
 using Microsoft.AspNetCore.Identity;
@@ -49,28 +50,22 @@ namespace ConstruFindAPI.API.Controllers
                 DataUltimoAcesso = DateTime.Now,
                 Endereco = new Endereco
                 {
-                    codigoEndereco = Guid.NewGuid(),
-                    numeroEndereco = "127",
-                    nomeLogradouro = "Rua 10",
-                    codigoCEP = "11346-400",
+                    numeroEndereco = userCreateModel.Endereco.Numero,
+                    nomeLogradouro = userCreateModel.Endereco.Rua,
+                    codigoCEP = userCreateModel.Endereco.CEP,
                     bairroEndereco = new Bairro
                     {
-                        codigoBairro = Guid.NewGuid(),
-                        nomeBairro = "Vila Nova São Vicente",
+                        nomeBairro = userCreateModel.Endereco.Bairro,
                         cidadeBairro = new Cidade
                         {
-                            codigoCidade = Guid.NewGuid(),
-                            nomeCidade = "São Vicente",
+                            nomeCidade = userCreateModel.Endereco.Bairro,
                             estadoCidade = new Estado
                             {
-                                codigoEstado = Guid.NewGuid(),
-                                nomeEstado = "São Paulo",
-                                Sigla = "SP"
+                                nomeEstado = userCreateModel.Endereco.Estado,
+                                Sigla = EnderecoUtils.GetSiglaEstado(userCreateModel.Endereco.Estado)
                             }
                         }
-                    }
-
-                    
+                    }                    
                 },
                 TipoUsuario = userCreateModel.TipoUsuario,
                 EmailConfirmed = true,
