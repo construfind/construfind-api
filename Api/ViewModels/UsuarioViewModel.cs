@@ -1,6 +1,7 @@
 using ConstruFindAPI.API.ViewModels.CustomValidators;
 using ConstruFindAPI.Business.Enums;
 using ConstruFindAPI.Business.Models;
+using ConstruFindAPI.ViewModels;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -9,7 +10,6 @@ namespace ConstruFindAPI.API.ViewModels
 
     public class UsuarioCreate
     {
-
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Nome { get; set; }
 
@@ -26,6 +26,9 @@ namespace ConstruFindAPI.API.ViewModels
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public TipoUsuario TipoUsuario { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public EnderecoCreate Endereco { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         [StringLength(100, ErrorMessage = "O campo {0} precisa ter entre {2} e {1} caracteres.", MinimumLength = 6)]
