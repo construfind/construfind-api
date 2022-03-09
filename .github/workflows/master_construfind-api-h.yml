@@ -10,6 +10,18 @@ on:
   workflow_dispatch:
 
 jobs:
+  database-migrations:
+    runs-on: windows-latest
+    
+    steps:  
+      - uses: actions/checkout@v2
+          
+      - name: Instalar "EF Tool"
+        run: dotnet tool update dotnet-ef -g
+          
+      - name: Rodar Migrations
+        run:  cd ./Data;
+              dotnet ef database update --connection "Data Source=construfind-data-h.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
   build:
     runs-on: windows-latest
 
