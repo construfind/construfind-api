@@ -21,7 +21,7 @@ jobs:
           
       - name: Rodar Migrations
         run:  cd ./Data;
-              dotnet ef database update --connection "Data Source=construfind.database.windows.net;Initial Catalog=construfindh;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
+              dotnet ef database update --connection "Data Source=construfind.database.windows.net;Initial Catalog=construfindh;User ID=cfd_hom;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
   build:
     runs-on: windows-latest
 
