@@ -1,4 +1,6 @@
 using ConstruFindAPI.API.Configuration;
+using ConstruFindAPI.Configuration;
+using Data.Seed;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -35,17 +37,23 @@ namespace ConstruFindAPI.API
             //Api
             services.AddApiConfiguration();
 
+            //Dependency Injection
+            services.RegisterDI();
+
             //Swagger
             services.AddSwaggerConfiguration();
         }
 
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AdminUserSeed adminUserSeed)
         {
             //Swagger
             app.UseSwaggerConfiguration();
 
             //Api + Identity
             app.UseApiConfiguration(env);
+
+            //Seed
+            adminUserSeed.SeedAdminUser();
         }
     }
 }
