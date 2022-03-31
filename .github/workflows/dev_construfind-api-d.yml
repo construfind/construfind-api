@@ -10,6 +10,66 @@ on:
   workflow_dispatch:
 
 jobs:
+  database-migrations:
+    runs-on: windows-latest
+    
+    steps:  
+      - uses: actions/checkout@v2
+          
+      - name: Instalar "EF Tool"
+        run: dotnet tool update dotnet-ef -g
+          
+      - name: Rodar Migrations
+        run:  cd ./Data;
+              dotnet ef database update --connection "Data Source=construfind.database.windows.net;Initial Catalog=construfindh;User ID=cfd_dev;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False" -s ../Api -p ../Data
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
+          include-prerelease: true
+
+      - name: Build with dotnet
+        run: dotnet build --configuration Release
+
+      - name: dotnet publish
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+
+      - name: Upload artifact for deployment job
+        uses: actions/upload-artifact@v2
+        with:
+          name: .net-app
+          path: ${{env.DOTNET_ROOT}}/myapp
+
+  deploy:
+    runs-on: windows-latest
+    needs: build
+    environment:
+      name: 'Production'
+      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+
+    steps:
+      - name: Download artifact from build job
+        uses: actions/download-artifact@v2
+        with:
+          name: .net-app
+
+      - name: Deploy to Azure Web App
+        id: deploy-to-webapp
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'construfind-api-h'
+          slot-name: 'Production'
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CCEC152D8124135A7D1AF13D0BD3E70 }}
+          package: .
+
+
+
   build:
     runs-on: windows-latest
 
