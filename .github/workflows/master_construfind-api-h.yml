@@ -1,12 +1,12 @@
 # Docs for the Azure Web Apps Deploy action: https://github.com/Azure/webapps-deploy
 # More GitHub Actions for Azure: https://github.com/Azure/actions
 
-name: Build and deploy ASP.Net Core app to Azure Web App - construfind-api-d
+name: Build and deploy ASP.Net Core app to Azure Web App - construfind-api-h
 
 on:
   push:
     branches:
-      - dev
+      - master
   workflow_dispatch:
 
 jobs:
@@ -21,8 +21,7 @@ jobs:
           
       - name: Rodar Migrations
         run:  cd ./Data;
-              dotnet ef database update --connection "Data Source=construfind.database.windows.net;Initial Catalog=cfd_dev;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=True" -s ../Api -p ../Data
-              
+              dotnet ef database update --connection "Data Source=construfind.database.windows.net;Initial Catalog=cfd_hom;User ID=construfind;Password=@CFD2021;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;MultipleActiveResultSets=True" -s ../Api -p ../Data
   build:
     runs-on: windows-latest
 
@@ -51,7 +50,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'DEV'
+      name: 'PROD'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -64,7 +63,7 @@ jobs:
         id: deploy-to-webapp
         uses: azure/webapps-deploy@v2
         with:
-          app-name: 'construfind-api-d'
+          app-name: 'construfind-api-h'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_07BC37EFD5C74B87B11BC5B50735F05E }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CCEC152D8124135A7D1AF13D0BD3E70 }}
           package: .
