@@ -65,6 +65,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'construfind-api-d'
-          slot-name: 'DEV'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_07BC37EFD5C74B87B11BC5B50735F05E }}
           package: .
