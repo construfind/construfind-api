@@ -1,4 +1,5 @@
 using ConstruFindAPI.API.Configuration;
+using ConstruFindAPI.Configuration;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -34,6 +35,9 @@ namespace ConstruFindAPI.API
 
             //Api
             services.AddApiConfiguration();
+
+            //Dependency Injection
+            services.RegisterDI();
 
             //Swagger
             services.AddSwaggerConfiguration();
