@@ -38,7 +38,7 @@ jobs:
         run: dotnet build --configuration PROD
 
       - name: dotnet publish
-        run: dotnet publish -c PROD -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v2
@@ -50,7 +50,7 @@ jobs:
     runs-on: windows-latest
     needs: build
     environment:
-      name: 'Production'
+      name: 'PROD'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
@@ -64,6 +64,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'construfind-api-h'
-          slot-name: 'Production'
+          slot-name: 'PROD'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CCEC152D8124135A7D1AF13D0BD3E70 }}
           package: .
