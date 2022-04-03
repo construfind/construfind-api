@@ -35,7 +35,7 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration PROD
+        run: dotnet build --configuration Release
 
       - name: dotnet publish
         run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
@@ -64,6 +64,6 @@ jobs:
         uses: azure/webapps-deploy@v2
         with:
           app-name: 'construfind-api-h'
-          slot-name: 'PROD'
+          slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_8CCEC152D8124135A7D1AF13D0BD3E70 }}
           package: .
