@@ -1,5 +1,4 @@
 using ConstruFindAPI.API.ViewModels.CustomValidators;
-using ConstruFindAPI.Business.Enums;
 using ConstruFindAPI.Business.Models;
 using ConstruFindAPI.ViewModels;
 using System.Collections.Generic;
@@ -25,7 +24,7 @@ namespace ConstruFindAPI.API.ViewModels
         public string Telefone { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        public TipoUsuario TipoUsuario { get; set; }
+        public string TipoUsuario { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public EnderecoCreate Endereco { get; set; }
@@ -53,6 +52,7 @@ namespace ConstruFindAPI.API.ViewModels
         public string AccessToken { get; set; }
         public double ExpiresIn { get; set; }
         public UserToken UserToken { get; set; }
+        public UserInfo UserInfo { get; set; }
     }
 
     public class UserToken
@@ -66,5 +66,12 @@ namespace ConstruFindAPI.API.ViewModels
     {
         public string Value { get; set; }
         public string Type { get; set; }
+    }
+
+    public class UserInfo
+    {
+        public string Nome { get; set; }
+        public string CPF { get; set; }
+        public string TipoUsuario { get; set; }
     }
 }

@@ -178,6 +178,12 @@ namespace ConstruFindAPI.API.Controllers
                     Id = user.Id,
                     Email = user.Email,
                     Claims = userClaims.Select(c => new UserClaim { Type = c.Type, Value = c.Value })
+                },
+                UserInfo = new UserInfo
+                {
+                    CPF = user.Documento,
+                    Nome = user.UserName,
+                    TipoUsuario = user.TipoUsuario
                 }
             };
         }
