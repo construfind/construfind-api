@@ -41,8 +41,8 @@ namespace ConstruFindAPI.API.ViewModels
     public class UserLogin
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [EmailAddress(ErrorMessage = "O campo {0} está em um formato inválido")]
-        public string Email { get; set; }
+        [CPFCNPJCustomValidation(ErrorMessage = "O campo {0} está em um formato inválido")]
+        public string CPF { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Senha { get; set; }

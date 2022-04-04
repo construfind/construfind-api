@@ -75,7 +75,7 @@ namespace ConstruFindAPI.API.Controllers
 
             if (res.Succeeded)
             {
-                return CustomResponse(await GenerateJWT(userCreateModel.Email));
+                return CustomResponse(await GenerateJWT(user));
             }
 
             foreach (var error in res.Errors)
@@ -91,11 +91,19 @@ namespace ConstruFindAPI.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var res = await _signinManager.PasswordSignInAsync(userLoginModel.Email, userLoginModel.Senha, false, true);
+            var user = _userManager.Users.SingleOrDefault(x => x.Documento == userLoginModel.CPF);
+
+            if(user == null)
+            {
+                ErrorProcess("Usuário ou senha incorretos.");
+                return CustomResponse();
+            }
+
+            var res = await _signinManager.PasswordSignInAsync(user, userLoginModel.Senha, false, true);
 
             if (res.Succeeded)
             {
-                return CustomResponse(await GenerateJWT(userLoginModel.Email));
+                return CustomResponse(await GenerateJWT(user));
             }
 
             if (res.IsLockedOut)
@@ -108,9 +116,8 @@ namespace ConstruFindAPI.API.Controllers
             return CustomResponse();
         }
 
-        private async Task<UserLoginReturn> GenerateJWT(string email)
+        private async Task<UserLoginReturn> GenerateJWT(Usuario user)
         {
-            var user = await _userManager.FindByEmailAsync(email);
             var userClaims = await _userManager.GetClaimsAsync(user);
 
             var identityClaims = await GenerateClaims(userClaims, user);
