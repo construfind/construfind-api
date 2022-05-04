@@ -46,6 +46,43 @@ namespace Business.Utils
             }
 
         }
+
+        public static string GetEstadoSigla(string UF)
+        {
+            switch (UF.ToUpper())
+            {
+                case "AC": return "ACRE";
+                case "AL": return "ALAGOAS";
+                case "AP": return "AP";
+                case "AM": return "AMAZONAS";
+                case "BA": return "BAHIA";
+                case "CE": return "CEARA";
+                case "DF": return "DISTRITO FEDERAL";
+                case "ES": return "ESPIRITO SANTO";
+                case "GO": return "GOIAS";
+                case "MA": return "MARANHAO";
+                case "MT": return "MATO GROSSO";
+                case "MS": return "MATO GROSSO DO SUL";
+                case "MG": return "MINAS GERAIS";
+                case "PA": return "PARA";
+                case "PB": return "PARAIBA";
+                case "PR": return "PARANA";
+                case "PE": return "PERNANBUCO";
+                case "PI": return "PIAUI";
+                case "RJ": return "RIO DE JANEIRO";
+                case "RN": return "RIO GRANDE DO NORTE";
+                case "RS": return "RIO GRANDE DO SUL";
+                case "RO": return "RONDONIA";
+                case "RR": return "RORAIMA";
+                case "SC": return "SANTA CATARINA";
+                case "SP": return "SAO PAULO";
+                case "SE": return "SERGIPE";
+                case "TO": return "TOCANTINS";
+                default: return null;
+            }
+
+        }
+
         private static string RemoveAccents(this string text)
         {
             StringBuilder sbReturn = new StringBuilder();

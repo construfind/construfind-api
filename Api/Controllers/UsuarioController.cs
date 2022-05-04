@@ -61,8 +61,8 @@ namespace ConstruFindAPI.API.Controllers
                             nomeCidade = userCreateModel.Endereco.Bairro,
                             estadoCidade = new Estado
                             {
-                                nomeEstado = userCreateModel.Endereco.Estado,
-                                Sigla = EnderecoUtils.GetSiglaEstado(userCreateModel.Endereco.Estado)
+                                nomeEstado = EnderecoUtils.GetEstadoSigla(userCreateModel.Endereco.UF),
+                                Sigla = userCreateModel.Endereco.UF
                             }
                         }
                     }                    
