@@ -36,7 +36,7 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [HttpPost("user-register")]
-        public async Task<ActionResult> Register(UsuarioCreate userCreateModel)
+        public async Task<ActionResult> Register([FromBody] UsuarioCreate userCreateModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -53,19 +53,10 @@ namespace ConstruFindAPI.API.Controllers
                     numeroEndereco = userCreateModel.Endereco.Numero,
                     nomeLogradouro = userCreateModel.Endereco.Rua,
                     codigoCEP = userCreateModel.Endereco.CEP,
-                    bairroEndereco = new Bairro
-                    {
-                        nomeBairro = userCreateModel.Endereco.Bairro,
-                        cidadeBairro = new Cidade
-                        {
-                            nomeCidade = userCreateModel.Endereco.Bairro,
-                            estadoCidade = new Estado
-                            {
-                                nomeEstado = EnderecoUtils.GetEstadoSigla(userCreateModel.Endereco.UF),
-                                Sigla = userCreateModel.Endereco.UF
-                            }
-                        }
-                    }                    
+                    nomeBairro = userCreateModel.Endereco.Bairro,
+                    nomeCidade = userCreateModel.Endereco.Bairro,
+                    nomeEstado = EnderecoUtils.GetEstadoSigla(userCreateModel.Endereco.UF),
+                    Sigla = userCreateModel.Endereco.UF                
                 },
                 TipoUsuario = userCreateModel.TipoUsuario,
                 EmailConfirmed = true,
@@ -87,7 +78,7 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [HttpPost("user-auth")]
-        public async Task<ActionResult> Login(UserLogin userLoginModel)
+        public async Task<ActionResult> Login([FromBody] UserLogin userLoginModel)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -113,6 +104,101 @@ namespace ConstruFindAPI.API.Controllers
             }
 
             ErrorProcess("Usuário ou senha incorretos.");
+            return CustomResponse();
+        }
+
+        [HttpGet("user-read/{cpf}")]
+        public ActionResult ReadByCPF([FromRoute] string cpf)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var user = _userManager.Users.SingleOrDefault(x => x.Documento == cpf);
+
+            if (user == null)
+            {
+                ErrorProcess("Usuário inexistente.");
+                return CustomResponse();
+            }
+            
+            var response = new UserReadViewModel
+            {
+                AccessFailedCount = user.AccessFailedCount,
+                DataCriacao = user.DataCriacao,
+                DataUltimoAcesso = user.DataUltimoAcesso,
+                Documento = user.Documento,
+                Email = user.Email,
+                EmailConfirmed = user.EmailConfirmed,
+                PhoneNumber = user.PhoneNumber,
+                TwoFactorEnabled = user.TwoFactorEnabled,
+                LockoutEnd = user.LockoutEnd,
+                LockoutEnabled = user.LockoutEnabled,
+                Endereco = user.Endereco,
+                Id = user.Id,
+                NormalizedEmail = user.NormalizedEmail,
+                PhoneNumberConfirmed = user.PhoneNumberConfirmed,
+                NormalizedUserName = user.NormalizedUserName,
+                TipoUsuario = user.TipoUsuario,
+                UserName = user.UserName
+            };
+
+            return CustomResponse(response);
+        }
+
+        [HttpPut("user-modify")]
+        public async Task<ActionResult> Modify([FromQuery] string CPF, UserModifyDTO userModifyDTO)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var user = _userManager.Users.SingleOrDefault(x => x.Documento == CPF);
+
+            if (user == null)
+            {
+                ErrorProcess("Usuário inexistente.");
+                return CustomResponse();
+            }
+
+            user.Endereco.numeroEndereco = userModifyDTO.Endereco.Numero;
+            user.Endereco.nomeLogradouro = userModifyDTO.Endereco.Rua;
+            user.Endereco.codigoCEP = userModifyDTO.Endereco.CEP;
+            user.Endereco.nomeBairro = userModifyDTO.Endereco.Bairro;
+            user.Endereco.nomeCidade = userModifyDTO.Endereco.Cidade;
+            user.Endereco.nomeEstado = EnderecoUtils.GetEstadoSigla(userModifyDTO.Endereco.UF);
+            user.Endereco.Sigla = userModifyDTO.Endereco.UF;
+
+            user.PhoneNumber = userModifyDTO.Telefone;
+
+            var res = await _userManager.UpdateAsync(user);
+
+            if (res.Succeeded)
+            {
+                return CustomResponse(res);
+            }
+
+            ErrorProcess("Usuário inexistente.");
+            return CustomResponse();
+        }
+
+        [HttpDelete("user-delete")]
+        public async Task<ActionResult> Delete([FromQuery] string CPF)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            var user = _userManager.Users.SingleOrDefault(x => x.Documento == CPF);
+
+            if (user == null)
+            {
+                ErrorProcess("Usuário inexistente.");
+                return CustomResponse();
+            }
+
+            var res = await _userManager.DeleteAsync(user);
+
+            if (res.Succeeded)
+            {
+                return CustomResponse(res);
+            }
+
+            ErrorProcess("Usuário inexistente.");
             return CustomResponse();
         }
 

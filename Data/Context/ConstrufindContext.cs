@@ -47,18 +47,6 @@ namespace ConstruFindAPI.Data.Context
             {
                 entity.ToTable("Enderecos");
             });
-            builder.Entity<Bairro>(entity =>
-            {
-                entity.ToTable("Bairros");
-            });
-            builder.Entity<Cidade>(entity =>
-            {
-                entity.ToTable("Cidades");
-            });
-            builder.Entity<Estado>(entity =>
-            {
-                entity.ToTable("Estados");
-            });
         }
     }
 }
