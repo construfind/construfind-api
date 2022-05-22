@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ConstrufindContext))]
-    [Migration("20211017193400_UpdateIdentity")]
-    partial class UpdateIdentity
+    [Migration("20220522204033_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -22,54 +22,25 @@ namespace Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Bairro", b =>
-                {
-                    b.Property<Guid>("codigoBairro")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("cidadeBairrocodigoCidade")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("nomeBairro")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("codigoBairro");
-
-                    b.HasIndex("cidadeBairrocodigoCidade");
-
-                    b.ToTable("Bairros");
-                });
-
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Cidade", b =>
-                {
-                    b.Property<Guid>("codigoCidade")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("estadoCidadecodigoEstado")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("nomeCidade")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("codigoCidade");
-
-                    b.HasIndex("estadoCidadecodigoEstado");
-
-                    b.ToTable("Cidades");
-                });
-
             modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
                 {
                     b.Property<Guid>("codigoEndereco")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("bairroEnderecocodigoBairro")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("Sigla")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("codigoCEP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("nomeBairro")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("nomeCidade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("nomeEstado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("nomeLogradouro")
@@ -80,26 +51,7 @@ namespace Data.Migrations
 
                     b.HasKey("codigoEndereco");
 
-                    b.HasIndex("bairroEnderecocodigoBairro");
-
                     b.ToTable("Enderecos");
-                });
-
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Estado", b =>
-                {
-                    b.Property<Guid>("codigoEstado")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Sigla")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("nomeEstado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("codigoEstado");
-
-                    b.ToTable("Estados");
                 });
 
             modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
@@ -159,8 +111,8 @@ namespace Data.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TipoUsuario")
-                        .HasColumnType("int");
+                    b.Property<string>("TipoUsuario")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -332,33 +284,6 @@ namespace Data.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("UserTokens");
-                });
-
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Bairro", b =>
-                {
-                    b.HasOne("ConstruFindAPI.Business.Models.Cidade", "cidadeBairro")
-                        .WithMany()
-                        .HasForeignKey("cidadeBairrocodigoCidade");
-
-                    b.Navigation("cidadeBairro");
-                });
-
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Cidade", b =>
-                {
-                    b.HasOne("ConstruFindAPI.Business.Models.Estado", "estadoCidade")
-                        .WithMany()
-                        .HasForeignKey("estadoCidadecodigoEstado");
-
-                    b.Navigation("estadoCidade");
-                });
-
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
-                {
-                    b.HasOne("ConstruFindAPI.Business.Models.Bairro", "bairroEndereco")
-                        .WithMany()
-                        .HasForeignKey("bairroEnderecocodigoBairro");
-
-                    b.Navigation("bairroEndereco");
                 });
 
             modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
