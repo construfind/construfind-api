@@ -1,6 +1,7 @@
 using ConstruFindAPI.API.ViewModels.CustomValidators;
 using ConstruFindAPI.Business.Models;
 using ConstruFindAPI.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -73,5 +74,39 @@ namespace ConstruFindAPI.API.ViewModels
         public string Nome { get; set; }
         public string CPF { get; set; }
         public string TipoUsuario { get; set; }
+    }
+
+    public class UserReadViewModel
+    {
+        public string Documento { get; set; }
+        public string TipoUsuario { get; set; }
+        public DateTime DataCriacao { get; set; }
+        public DateTime DataUltimoAcesso { get; set; }
+        public Endereco Endereco { get; set; }
+        public string Id { get; set; }
+        public string UserName { get; set; }
+        public string NormalizedUserName { get; set; }
+        public string Email { get; set; }
+        public string NormalizedEmail { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
+        public bool LockoutEnabled { get; set; }
+        public int AccessFailedCount { get; set; }
+    }
+
+    public class UserModifyDTO
+    {
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [CPFCNPJCustomValidation(ErrorMessage = "O campo {0} está em um formato inválido")]
+        public string CPF { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public EnderecoCreate Endereco { get; set; }
+
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        public string Telefone { get; set; }
     }
 }

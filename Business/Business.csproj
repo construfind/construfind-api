@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.3" NoWarn="NU1605" />
     <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="5.0.11" NoWarn="NU1605" />
   </ItemGroup>

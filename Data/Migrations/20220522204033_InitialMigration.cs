@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Data.Migrations
 {
-    public partial class InitialBase : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -11,7 +11,7 @@ namespace Data.Migrations
                 name: "Identity");
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "AspNetRoles",
                 schema: "Identity",
                 columns: table => new
                 {
@@ -22,7 +22,64 @@ namespace Data.Migrations
                 },
                 constraints: table =>
                 {
+                    table.PrimaryKey("PK_AspNetRoles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Enderecos",
+                schema: "Identity",
+                columns: table => new
+                {
+                    codigoEndereco = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    numeroEndereco = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    nomeLogradouro = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    codigoCEP = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    nomeBairro = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    nomeCidade = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    nomeEstado = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sigla = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Enderecos", x => x.codigoEndereco);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Role",
+                schema: "Identity",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
                     table.PrimaryKey("PK_Role", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RoleClaims",
+                schema: "Identity",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_RoleClaims_AspNetRoles_RoleId",
+                        column: x => x.RoleId,
+                        principalSchema: "Identity",
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -31,6 +88,11 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Documento = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    TipoUsuario = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataCriacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataUltimoAcesso = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EnderecocodigoEndereco = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
@@ -49,29 +111,13 @@ namespace Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "RoleClaims",
-                schema: "Identity",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_RoleClaims_Role_RoleId",
-                        column: x => x.RoleId,
+                        name: "FK_User_Enderecos_EnderecocodigoEndereco",
+                        column: x => x.EnderecocodigoEndereco,
                         principalSchema: "Identity",
-                        principalTable: "Role",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalTable: "Enderecos",
+                        principalColumn: "codigoEndereco",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,8 +148,8 @@ namespace Data.Migrations
                 schema: "Identity",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
@@ -131,10 +177,10 @@ namespace Data.Migrations
                 {
                     table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
                     table.ForeignKey(
-                        name: "FK_UserRoles_Role_RoleId",
+                        name: "FK_UserRoles_AspNetRoles_RoleId",
                         column: x => x.RoleId,
                         principalSchema: "Identity",
-                        principalTable: "Role",
+                        principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -152,8 +198,8 @@ namespace Data.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -171,7 +217,7 @@ namespace Data.Migrations
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
                 schema: "Identity",
-                table: "Role",
+                table: "AspNetRoles",
                 column: "NormalizedName",
                 unique: true,
                 filter: "[NormalizedName] IS NOT NULL");
@@ -187,6 +233,12 @@ namespace Data.Migrations
                 schema: "Identity",
                 table: "User",
                 column: "NormalizedEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_User_EnderecocodigoEndereco",
+                schema: "Identity",
+                table: "User",
+                column: "EnderecocodigoEndereco");
 
             migrationBuilder.CreateIndex(
                 name: "UserNameIndex",
@@ -218,6 +270,10 @@ namespace Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "Role",
+                schema: "Identity");
+
+            migrationBuilder.DropTable(
                 name: "RoleClaims",
                 schema: "Identity");
 
@@ -238,11 +294,15 @@ namespace Data.Migrations
                 schema: "Identity");
 
             migrationBuilder.DropTable(
-                name: "Role",
+                name: "AspNetRoles",
                 schema: "Identity");
 
             migrationBuilder.DropTable(
                 name: "User",
+                schema: "Identity");
+
+            migrationBuilder.DropTable(
+                name: "Enderecos",
                 schema: "Identity");
         }
     }
