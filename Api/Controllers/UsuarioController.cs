@@ -2,6 +2,7 @@
 using ConstruFindAPI.API.Configuration.Extensions;
 using ConstruFindAPI.API.ViewModels;
 using ConstruFindAPI.Business.Models;
+using ConstruFindAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -42,22 +43,20 @@ namespace ConstruFindAPI.API.Controllers
 
             var user = new Usuario
             {
+                NomeCompleto = userCreateModel.Nome,
                 UserName = userCreateModel.Email,
                 Email = userCreateModel.Email,
                 PhoneNumber = userCreateModel.Telefone,
                 Documento = userCreateModel.Documento,
                 DataCriacao = DateTime.Now,
-                DataUltimoAcesso = DateTime.Now,
-                Endereco = new Endereco
-                {
-                    numeroEndereco = userCreateModel.Endereco.Numero,
-                    nomeLogradouro = userCreateModel.Endereco.Rua,
-                    codigoCEP = userCreateModel.Endereco.CEP,
-                    nomeBairro = userCreateModel.Endereco.Bairro,
-                    nomeCidade = userCreateModel.Endereco.Bairro,
-                    nomeEstado = EnderecoUtils.GetEstadoSigla(userCreateModel.Endereco.UF),
-                    Sigla = userCreateModel.Endereco.UF                
-                },
+                DataUltimoAcesso = DateTime.Now,                
+                NumeroEndereco = userCreateModel.Endereco.Numero,
+                NomeLogradouro = userCreateModel.Endereco.Rua,
+                CodigoCEP = userCreateModel.Endereco.CEP,
+                NomeBairro = userCreateModel.Endereco.Bairro,
+                NomeCidade = userCreateModel.Endereco.Cidade,
+                NomeEstado = EnderecoUtils.GetEstadoSigla(userCreateModel.Endereco.UF),
+                SiglaEstado = userCreateModel.Endereco.UF,           
                 TipoUsuario = userCreateModel.TipoUsuario,
                 EmailConfirmed = true,
             };
@@ -112,7 +111,7 @@ namespace ConstruFindAPI.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var user = _userManager.Users.SingleOrDefault(x => x.Documento == cpf);
+            var user = _userManager.Users.Where(x => x.Documento == cpf).FirstOrDefault();
 
             if (user == null)
             {
@@ -122,6 +121,7 @@ namespace ConstruFindAPI.API.Controllers
             
             var response = new UserReadViewModel
             {
+                NomeCompleto = user.NomeCompleto,
                 AccessFailedCount = user.AccessFailedCount,
                 DataCriacao = user.DataCriacao,
                 DataUltimoAcesso = user.DataUltimoAcesso,
@@ -131,14 +131,20 @@ namespace ConstruFindAPI.API.Controllers
                 PhoneNumber = user.PhoneNumber,
                 TwoFactorEnabled = user.TwoFactorEnabled,
                 LockoutEnd = user.LockoutEnd,
-                LockoutEnabled = user.LockoutEnabled,
-                Endereco = user.Endereco,
+                LockoutEnabled = user.LockoutEnabled,                
                 Id = user.Id,
                 NormalizedEmail = user.NormalizedEmail,
                 PhoneNumberConfirmed = user.PhoneNumberConfirmed,
                 NormalizedUserName = user.NormalizedUserName,
                 TipoUsuario = user.TipoUsuario,
-                UserName = user.UserName
+                UserName = user.UserName,
+                SiglaEstado = user.SiglaEstado,
+                NomeLogradouro = user.NomeLogradouro,
+                NumeroEndereco = user.NumeroEndereco,
+                CodigoCEP = user.CodigoCEP,
+                NomeBairro = user.NomeBairro,
+                NomeCidade = user.NomeCidade,
+                NomeEstado = user.NomeEstado
             };
 
             return CustomResponse(response);
@@ -157,13 +163,13 @@ namespace ConstruFindAPI.API.Controllers
                 return CustomResponse();
             }
 
-            user.Endereco.numeroEndereco = userModifyDTO.Endereco.Numero;
-            user.Endereco.nomeLogradouro = userModifyDTO.Endereco.Rua;
-            user.Endereco.codigoCEP = userModifyDTO.Endereco.CEP;
-            user.Endereco.nomeBairro = userModifyDTO.Endereco.Bairro;
-            user.Endereco.nomeCidade = userModifyDTO.Endereco.Cidade;
-            user.Endereco.nomeEstado = EnderecoUtils.GetEstadoSigla(userModifyDTO.Endereco.UF);
-            user.Endereco.Sigla = userModifyDTO.Endereco.UF;
+            user.NumeroEndereco = userModifyDTO.Endereco.Numero;
+            user.NomeLogradouro = userModifyDTO.Endereco.Rua;
+            user.CodigoCEP = userModifyDTO.Endereco.CEP;
+            user.NomeBairro = userModifyDTO.Endereco.Bairro;
+            user.NomeCidade = userModifyDTO.Endereco.Cidade;
+            user.NomeEstado = EnderecoUtils.GetEstadoSigla(userModifyDTO.Endereco.UF);
+            user.SiglaEstado = userModifyDTO.Endereco.UF;
 
             user.PhoneNumber = userModifyDTO.Telefone;
 
@@ -183,7 +189,7 @@ namespace ConstruFindAPI.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var user = _userManager.Users.SingleOrDefault(x => x.Documento == CPF);
+            var user = _userManager.Users.Where(x => x.Documento == CPF).FirstOrDefault();
 
             if (user == null)
             {
@@ -268,8 +274,19 @@ namespace ConstruFindAPI.API.Controllers
                 UserInfo = new UserInfo
                 {
                     CPF = user.Documento,
-                    Nome = user.UserName,
-                    TipoUsuario = user.TipoUsuario
+                    NomeCompleto = user.NomeCompleto,
+                    TipoUsuario = user.TipoUsuario,
+                    Email = user.Email,
+                    Endereco = new EnderecoViewModel
+                    {
+                        Bairro = user.NomeBairro,
+                        CEP = user.NomeBairro,
+                        Cidade = user.NomeCidade,
+                        Numero = user.NumeroEndereco,
+                        Rua = user.NomeLogradouro,
+                        UF = user.SiglaEstado
+                    },
+                    Telefone = user.PhoneNumber                    
                 }
             };
         }

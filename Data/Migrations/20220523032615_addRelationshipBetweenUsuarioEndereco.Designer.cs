@@ -4,14 +4,16 @@ using ConstruFindAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ConstrufindContext))]
-    partial class ConstrufindContextModelSnapshot : ModelSnapshot
+    [Migration("20220523032615_addRelationshipBetweenUsuarioEndereco")]
+    partial class addRelationshipBetweenUsuarioEndereco
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -20,6 +22,46 @@ namespace Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.11")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
+                {
+                    b.Property<int>("IdEndereco")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("CodigoCEP")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeBairro")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeCidade")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeEstado")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NomeLogradouro")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NumeroEndereco")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("SiglaEstado")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioRef")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("IdEndereco");
+
+                    b.HasIndex("UsuarioRef")
+                        .IsUnique()
+                        .HasFilter("[UsuarioRef] IS NOT NULL");
+
+                    b.ToTable("Endereco");
+                });
+
             modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
                 {
                     b.Property<string>("Id")
@@ -27,9 +69,6 @@ namespace Data.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("CodigoCEP")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -57,21 +96,6 @@ namespace Data.Migrations
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
 
-                    b.Property<string>("NomeBairro")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeCidade")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeCompleto")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeEstado")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NomeLogradouro")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -79,9 +103,6 @@ namespace Data.Migrations
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
-
-                    b.Property<string>("NumeroEndereco")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -93,9 +114,6 @@ namespace Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SiglaEstado")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TipoUsuario")
@@ -271,6 +289,15 @@ namespace Data.Migrations
                     b.ToTable("UserTokens");
                 });
 
+            modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
+                {
+                    b.HasOne("ConstruFindAPI.Business.Models.Usuario", "Usuario")
+                        .WithOne("Endereco")
+                        .HasForeignKey("ConstruFindAPI.Business.Models.Endereco", "UsuarioRef");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("ConstruFindAPI.Business.Models.UsuarioRole", null)
@@ -320,6 +347,11 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
+                {
+                    b.Navigation("Endereco");
                 });
 #pragma warning restore 612, 618
         }
