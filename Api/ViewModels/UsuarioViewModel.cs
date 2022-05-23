@@ -74,6 +74,9 @@ namespace ConstruFindAPI.API.ViewModels
         public string Nome { get; set; }
         public string CPF { get; set; }
         public string TipoUsuario { get; set; }
+        public string Telefone { get; set; }
+        public string Email { get; set; }
+        public Endereco Endereco { get; set; }
     }
 
     public class UserReadViewModel

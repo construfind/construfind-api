@@ -269,7 +269,10 @@ namespace ConstruFindAPI.API.Controllers
                 {
                     CPF = user.Documento,
                     Nome = user.UserName,
-                    TipoUsuario = user.TipoUsuario
+                    TipoUsuario = user.TipoUsuario,
+                    Email = user.Email,
+                    Endereco = user.Endereco,
+                    Telefone = user.PhoneNumber                    
                 }
             };
         }

@@ -45,7 +45,7 @@ namespace ConstruFindAPI.Data.Context
 
             builder.Entity<Endereco>(entity =>
             {
-                entity.ToTable("Enderecos");
+                entity.ToTable("Endereco");
             });
         }
     }
