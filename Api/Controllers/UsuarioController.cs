@@ -151,11 +151,11 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [HttpPut("user-modify")]
-        public async Task<ActionResult> Modify([FromQuery] string CPF, UserModifyDTO userModifyDTO)
+        public async Task<ActionResult> Modify([FromQuery] UserParamCPF paramCPF, UserModifyDTO userModifyDTO)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var user = _userManager.Users.SingleOrDefault(x => x.Documento == CPF);
+            var user = _userManager.Users.Where(x => x.Documento == paramCPF.CPF).FirstOrDefault();
 
             if (user == null)
             {
@@ -185,11 +185,11 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [HttpDelete("user-delete")]
-        public async Task<ActionResult> Delete([FromQuery] string CPF)
+        public async Task<ActionResult> Delete([FromQuery] UserParamCPF paramCPF)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-            var user = _userManager.Users.Where(x => x.Documento == CPF).FirstOrDefault();
+            var user = _userManager.Users.Where(x => x.Documento == paramCPF.CPF).FirstOrDefault();
 
             if (user == null)
             {
