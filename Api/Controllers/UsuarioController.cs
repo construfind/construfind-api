@@ -280,7 +280,7 @@ namespace ConstruFindAPI.API.Controllers
                     Endereco = new EnderecoViewModel
                     {
                         Bairro = user.NomeBairro,
-                        CEP = user.NomeBairro,
+                        CEP = user.CodigoCEP,
                         Cidade = user.NomeCidade,
                         Numero = user.NumeroEndereco,
                         Rua = user.NomeLogradouro,
