@@ -110,13 +110,16 @@ namespace ConstruFindAPI.API.ViewModels
     public class UserModifyDTO
     {
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
-        [CPFCNPJCustomValidation(ErrorMessage = "O campo {0} está em um formato inválido")]
-        public string CPF { get; set; }
-
-        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public EnderecoCreate Endereco { get; set; }
 
         [Required(ErrorMessage = "O campo {0} é obrigatório.")]
         public string Telefone { get; set; }
+    }
+
+    public class UserParamCPF
+    {
+        [Required(ErrorMessage = "O campo {0} é obrigatório.")]
+        [CPFCNPJCustomValidation(ErrorMessage = "O campo {0} está em um formato inválido")]
+        public string CPF { get; set; }
     }
 }
