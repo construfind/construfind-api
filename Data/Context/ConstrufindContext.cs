@@ -14,10 +14,12 @@ namespace ConstruFindAPI.Data.Context
         {
             base.OnModelCreating(builder);
             builder.HasDefaultSchema("Identity");
+
             builder.Entity<Usuario>(entity =>
             {
                 entity.ToTable(name: "User");
             });
+
             builder.Entity<IdentityRole>(entity =>
             {
                 entity.ToTable(name: "Role");
@@ -41,11 +43,6 @@ namespace ConstruFindAPI.Data.Context
             builder.Entity<IdentityUserToken<string>>(entity =>
             {
                 entity.ToTable("UserTokens");
-            });
-
-            builder.Entity<Endereco>(entity =>
-            {
-                entity.ToTable("Endereco");
             });
         }
     }

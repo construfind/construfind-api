@@ -71,21 +71,21 @@ namespace ConstruFindAPI.API.ViewModels
 
     public class UserInfo
     {
-        public string Nome { get; set; }
+        public string NomeCompleto { get; set; }
         public string CPF { get; set; }
         public string TipoUsuario { get; set; }
         public string Telefone { get; set; }
         public string Email { get; set; }
-        public Endereco Endereco { get; set; }
+        public EnderecoViewModel Endereco { get; set; }
     }
 
     public class UserReadViewModel
     {
+        public string NomeCompleto { get; set; }
         public string Documento { get; set; }
         public string TipoUsuario { get; set; }
         public DateTime DataCriacao { get; set; }
-        public DateTime DataUltimoAcesso { get; set; }
-        public Endereco Endereco { get; set; }
+        public DateTime DataUltimoAcesso { get; set; }        
         public string Id { get; set; }
         public string UserName { get; set; }
         public string NormalizedUserName { get; set; }
@@ -98,6 +98,13 @@ namespace ConstruFindAPI.API.ViewModels
         public DateTimeOffset? LockoutEnd { get; set; }
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
+        public string NumeroEndereco { get; set; }
+        public string NomeLogradouro { get; set; }
+        public string CodigoCEP { get; set; }
+        public string NomeBairro { get; set; }
+        public string NomeCidade { get; set; }
+        public string NomeEstado { get; set; }
+        public string SiglaEstado { get; set; }
     }
 
     public class UserModifyDTO

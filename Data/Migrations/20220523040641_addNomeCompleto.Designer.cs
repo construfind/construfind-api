@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(ConstrufindContext))]
-    [Migration("20220522205315_FixEnderecos")]
-    partial class FixEnderecos
+    [Migration("20220523040641_addNomeCompleto")]
+    partial class addNomeCompleto
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,32 +24,40 @@ namespace Data.Migrations
 
             modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
                 {
-                    b.Property<Guid>("codigoEndereco")
+                    b.Property<int>("IdEndereco")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Sigla")
+                    b.Property<string>("CodigoCEP")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("codigoCEP")
+                    b.Property<string>("NomeBairro")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nomeBairro")
+                    b.Property<string>("NomeCidade")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nomeCidade")
+                    b.Property<string>("NomeEstado")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nomeEstado")
+                    b.Property<string>("NomeLogradouro")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("nomeLogradouro")
+                    b.Property<string>("NumeroEndereco")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("numeroEndereco")
+                    b.Property<string>("SiglaEstado")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("codigoEndereco");
+                    b.Property<string>("UsuarioRef")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("IdEndereco");
+
+                    b.HasIndex("UsuarioRef")
+                        .IsUnique()
+                        .HasFilter("[UsuarioRef] IS NOT NULL");
 
                     b.ToTable("Endereco");
                 });
@@ -82,14 +90,14 @@ namespace Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("EnderecocodigoEndereco")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
 
                     b.Property<DateTimeOffset?>("LockoutEnd")
                         .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("NomeCompleto")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
@@ -122,8 +130,6 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("EnderecocodigoEndereco");
 
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
@@ -286,13 +292,13 @@ namespace Data.Migrations
                     b.ToTable("UserTokens");
                 });
 
-            modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
+            modelBuilder.Entity("ConstruFindAPI.Business.Models.Endereco", b =>
                 {
-                    b.HasOne("ConstruFindAPI.Business.Models.Endereco", "Endereco")
-                        .WithMany()
-                        .HasForeignKey("EnderecocodigoEndereco");
+                    b.HasOne("ConstruFindAPI.Business.Models.Usuario", "Usuario")
+                        .WithOne("Endereco")
+                        .HasForeignKey("ConstruFindAPI.Business.Models.Endereco", "UsuarioRef");
 
-                    b.Navigation("Endereco");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -344,6 +350,11 @@ namespace Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("ConstruFindAPI.Business.Models.Usuario", b =>
+                {
+                    b.Navigation("Endereco");
                 });
 #pragma warning restore 612, 618
         }

@@ -9,7 +9,9 @@ namespace ConstruFindAPI.API.Configuration
     {
         public static IServiceCollection AddApiConfiguration(this IServiceCollection services)
         {
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(options =>
+                options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
             services.AddCors(o => o.AddPolicy("AllowAll", builder =>
             {
