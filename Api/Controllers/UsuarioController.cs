@@ -41,6 +41,14 @@ namespace ConstruFindAPI.API.Controllers
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
+            var existentUser = _userManager.Users.Where(x => x.Documento == userCreateModel.Documento).Any();
+
+            if (existentUser)
+            {
+                ErrorProcess("Usuário já existente com esse Documento.");
+                return CustomResponse();
+            }
+
             var user = new Usuario
             {
                 NomeCompleto = userCreateModel.Nome,
