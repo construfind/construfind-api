@@ -4,14 +4,16 @@ using ConstruFindAPI.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Data.Migrations
 {
     [DbContext(typeof(ConstrufindContext))]
-    partial class ConstrufindContextModelSnapshot : ModelSnapshot
+    [Migration("20220614054846_FixServicoForeignKey")]
+    partial class FixServicoForeignKey
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -38,20 +40,12 @@ namespace Data.Migrations
                     b.Property<string>("Titulo")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("UsuarioContratanteForeignID")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UsuarioPrestadorCPF")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("UsuarioPrestadorId")
+                    b.Property<string>("UsuarioForeignID")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UsuarioContratanteForeignID");
-
-                    b.HasIndex("UsuarioPrestadorId");
+                    b.HasIndex("UsuarioForeignID");
 
                     b.ToTable("Servicos");
                 });
@@ -309,17 +303,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Business.Models.Servico", b =>
                 {
-                    b.HasOne("Business.Models.Usuario", "UsuarioContratante")
+                    b.HasOne("Business.Models.Usuario", "Usuario")
                         .WithMany("Servicos")
-                        .HasForeignKey("UsuarioContratanteForeignID");
+                        .HasForeignKey("UsuarioForeignID");
 
-                    b.HasOne("Business.Models.Usuario", "UsuarioPrestador")
-                        .WithMany()
-                        .HasForeignKey("UsuarioPrestadorId");
-
-                    b.Navigation("UsuarioContratante");
-
-                    b.Navigation("UsuarioPrestador");
+                    b.Navigation("Usuario");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

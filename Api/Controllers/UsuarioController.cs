@@ -1,7 +1,7 @@
-﻿using Business.Utils;
+﻿using Business.Models;
+using Business.Utils;
 using ConstruFindAPI.API.Configuration.Extensions;
 using ConstruFindAPI.API.ViewModels;
-using ConstruFindAPI.Business.Models;
 using ConstruFindAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -14,8 +14,6 @@ using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
-
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
 namespace ConstruFindAPI.API.Controllers
 {

@@ -18,6 +18,33 @@ namespace ConstruFindAPI.API.Configuration
                     Contact = new OpenApiContact() { Name = "Thiago Mathias", Email = "thiagomathias98@gmail.com" },
                     License = new OpenApiLicense() { Name = "MIT", Url = new Uri("https://opensource.org/licenses/MIT") }
                 });
+
+                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+                {
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey,
+                    Scheme = "Bearer",
+                    BearerFormat = "JWT",
+                    In = ParameterLocation.Header,
+                    Description = @$"JWT Authorization header usando o esquema Bearer.
+                   \r\n\r\n Insira 'Bearer'[space] e depois o seu token..
+                    \r\n\r\nExemplo: \'Bearer 12345abcdef\'",
+                });
+
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                          new OpenApiSecurityScheme
+                          {
+                              Reference = new OpenApiReference
+                              {
+                                  Type = ReferenceType.SecurityScheme,
+                                  Id = "Bearer"
+                              }
+                          },
+                         new string[] {}
+                    }
+                });
             });
 
             return services;

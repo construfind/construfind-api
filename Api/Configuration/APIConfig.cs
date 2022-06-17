@@ -29,14 +29,15 @@ namespace ConstruFindAPI.API.Configuration
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseRouting();
-
-            app.UseCors("MyPolicy");
-
             app.UseHttpsRedirection();
 
-            //Identity
-            app.UseIdentityConfiguration();
+            app.UseRouting();
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseCors("AllowAll");
 
             app.UseEndpoints(endpoints =>
             {
