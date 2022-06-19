@@ -256,7 +256,7 @@ namespace ConstruFindAPI.API.Controllers
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.ValideOn,
                 Subject = claims,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.Expires),
+                Expires = DateTime.UtcNow.AddYears(_appSettings.Expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
@@ -270,7 +270,7 @@ namespace ConstruFindAPI.API.Controllers
             return new UserLoginReturn
             {
                 AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.Expires).TotalSeconds,
+                ExpiresIn = TimeSpan.FromDays(_appSettings.Expires).TotalSeconds,
                 UserToken = new UserToken
                 {
                     Id = user.Id,
