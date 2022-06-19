@@ -133,13 +133,8 @@ namespace ConstruFindAPI.API.Controllers
 
                 if (servicosExistentes == null)
                 {
-                    ErrorProcess("Não existem serviços no momento, volte novamente em breve!");
+                    ErrorProcess("Não existem serviços no momento, crie serviços para buscar profissionais!");
                     return CustomResponse();
-                }
-
-                foreach (var servicoExistente in servicosExistentes)
-                {
-                    servicoExistente.UsuarioContratante = null;
                 }
 
                 return CustomResponse(servicosExistentes);
