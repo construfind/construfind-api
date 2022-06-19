@@ -101,7 +101,43 @@ namespace ConstruFindAPI.API.Controllers
                     return CustomResponse();
                 }
 
-                foreach(var servicoExistente in servicosExistentes)
+                return CustomResponse(servicosExistentes);
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Serviço criado com Sucesso!");
+        }
+
+        [Authorize]
+        [HttpGet("service-read-user")]
+        public async Task<ActionResult> ServiceReadByUser()
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var aux = _dbContext.Servicos.ToList();
+
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioContratante.Email == user.Email);
+
+                if (servicosExistentes == null)
+                {
+                    ErrorProcess("Não existem serviços no momento, volte novamente em breve!");
+                    return CustomResponse();
+                }
+
+                foreach (var servicoExistente in servicosExistentes)
                 {
                     servicoExistente.UsuarioContratante = null;
                 }
