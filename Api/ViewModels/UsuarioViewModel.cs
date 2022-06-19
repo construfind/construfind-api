@@ -1,5 +1,4 @@
 using ConstruFindAPI.API.ViewModels.CustomValidators;
-using ConstruFindAPI.Business.Models;
 using ConstruFindAPI.ViewModels;
 using System;
 using System.Collections.Generic;

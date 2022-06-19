@@ -1,7 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using System;
+using System.Collections.Generic;
 
-namespace ConstruFindAPI.Business.Models
+namespace Business.Models
 {
     public class Usuario : IdentityUser
     {
@@ -40,6 +41,9 @@ namespace ConstruFindAPI.Business.Models
 
         [PersonalData]
         public string SiglaEstado { get; set; }
+
+        [PersonalData]
+        public ICollection<Servico> Servicos { get; set; }
 
     }
     public class UsuarioRole : IdentityRole

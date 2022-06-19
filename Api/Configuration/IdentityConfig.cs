@@ -1,5 +1,5 @@
-﻿using ConstruFindAPI.API.Configuration.Extensions;
-using ConstruFindAPI.Business.Models;
+﻿using Business.Models;
+using ConstruFindAPI.API.Configuration.Extensions;
 using ConstruFindAPI.Data.Context;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -58,15 +58,6 @@ namespace ConstruFindAPI.API.Configuration
             });
 
             return services;
-        }
-
-        public static IApplicationBuilder UseIdentityConfiguration(this IApplicationBuilder app)
-        {
-            app.UseAuthorization();
-
-            app.UseAuthentication();
-
-            return app;
         }
     }
 }
