@@ -184,8 +184,8 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [Authorize]
-        [HttpDelete("service-delete/{idServico}")]
-        public async Task<ActionResult> ServiceDeleteByID([FromRoute] string idServico)
+        [HttpDelete("service-delete")]
+        public async Task<ActionResult> ServiceDeleteByID([FromQuery] string idServico)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -221,8 +221,8 @@ namespace ConstruFindAPI.API.Controllers
         }
 
         [Authorize]
-        [HttpPut("service-modify/{idServico}")]
-        public async Task<ActionResult> ServiceModifyByID([FromRoute] string idServico, [FromBody] ServicoUpdateViewModel request)
+        [HttpPut("service-modify")]
+        public async Task<ActionResult> ServiceModifyByID([FromQuery] string idServico, [FromBody] ServicoUpdateViewModel request)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
