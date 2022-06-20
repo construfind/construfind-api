@@ -2,6 +2,7 @@
 using Business.Utils;
 using ConstruFindAPI.API.Configuration.Extensions;
 using ConstruFindAPI.API.ViewModels;
+using ConstruFindAPI.Data.Context;
 using ConstruFindAPI.ViewModels;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +25,17 @@ namespace ConstruFindAPI.API.Controllers
         private readonly SignInManager<Usuario> _signinManager;
         private readonly UserManager<Usuario> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ConstrufindContext _dbContext;
 
         public UsuarioController(SignInManager<Usuario> signinManager,
                                 UserManager<Usuario> userManager,
-                                IOptions<AppSettings> appSettings)
+                                IOptions<AppSettings> appSettings,
+                                ConstrufindContext dbContext)
         {
             _signinManager = signinManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _dbContext = dbContext;
         }
 
         [HttpPost("user-register")]
@@ -203,6 +207,11 @@ namespace ConstruFindAPI.API.Controllers
                 return CustomResponse();
             }
 
+            var servicosUsuario = _dbContext.Servicos.Where(x => x.UsuarioContratante.Documento == user.Documento);
+
+            _dbContext.RemoveRange(servicosUsuario);
+            _dbContext.SaveChanges();
+
             var res = await _userManager.DeleteAsync(user);
 
             if (res.Succeeded)
@@ -256,7 +265,7 @@ namespace ConstruFindAPI.API.Controllers
                 Issuer = _appSettings.Issuer,
                 Audience = _appSettings.ValideOn,
                 Subject = claims,
-                Expires = DateTime.UtcNow.AddHours(_appSettings.Expires),
+                Expires = DateTime.UtcNow.AddYears(_appSettings.Expires),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             });
 
@@ -270,7 +279,7 @@ namespace ConstruFindAPI.API.Controllers
             return new UserLoginReturn
             {
                 AccessToken = encodedToken,
-                ExpiresIn = TimeSpan.FromHours(_appSettings.Expires).TotalSeconds,
+                ExpiresIn = TimeSpan.FromDays(_appSettings.Expires).TotalSeconds,
                 UserToken = new UserToken
                 {
                     Id = user.Id,

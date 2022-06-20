@@ -79,7 +79,7 @@ namespace ConstruFindAPI.API.Controllers
 
         [Authorize]
         [HttpGet("service-read")]
-        public async Task<ActionResult> ServiceReadByID()
+        public async Task<ActionResult> ServiceRead()
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
 
@@ -93,7 +93,7 @@ namespace ConstruFindAPI.API.Controllers
                     return CustomResponse();
                 }
 
-                var servicosExistentes = _dbContext.Servicos.ToList();
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioPrestadorCPF == null);
 
                 if (servicosExistentes == null)
                 {
@@ -108,7 +108,7 @@ namespace ConstruFindAPI.API.Controllers
                 ErrorProcess(ex.Message);
             }
 
-            return CustomResponse("Serviço criado com Sucesso!");
+            return CustomResponse("Erro interno ao buscar os serviços, contate o suporte.");
         }
 
         [Authorize]
@@ -133,13 +133,8 @@ namespace ConstruFindAPI.API.Controllers
 
                 if (servicosExistentes == null)
                 {
-                    ErrorProcess("Não existem serviços no momento, volte novamente em breve!");
+                    ErrorProcess("Não existem serviços no momento, crie serviços para buscar profissionais!");
                     return CustomResponse();
-                }
-
-                foreach (var servicoExistente in servicosExistentes)
-                {
-                    servicoExistente.UsuarioContratante = null;
                 }
 
                 return CustomResponse(servicosExistentes);
@@ -149,7 +144,43 @@ namespace ConstruFindAPI.API.Controllers
                 ErrorProcess(ex.Message);
             }
 
-            return CustomResponse("Serviço criado com Sucesso!");
+            return CustomResponse("Erro interno ao buscar os serviços, contate o suporte.");
+        }
+
+        [Authorize]
+        [HttpGet("service-read-user-prestador")]
+        public async Task<ActionResult> ServiceReadByUserPrestador()
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var aux = _dbContext.Servicos.ToList();
+
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioPrestadorCPF == user.Documento);
+
+                if (servicosExistentes == null)
+                {
+                    ErrorProcess("Não existem serviços no momento, crie serviços para buscar profissionais!");
+                    return CustomResponse();
+                }
+
+                return CustomResponse(servicosExistentes);
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao buscar os serviços, contate o suporte.");
         }
 
         [Authorize]
@@ -186,6 +217,171 @@ namespace ConstruFindAPI.API.Controllers
             }
 
             return CustomResponse("Serviço criado com Sucesso!");
+        }
+
+        [Authorize]
+        [HttpDelete("service-delete")]
+        public async Task<ActionResult> ServiceDeleteByID([FromQuery] string idServico)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var servicoExistente = _dbContext.Find<Servico>(Guid.Parse(idServico));
+
+                if (servicoExistente == null)
+                {
+                    ErrorProcess("Serviço inexistente!");
+                    return CustomResponse();
+                }
+                
+                _dbContext.Remove(servicoExistente);
+                _dbContext.SaveChanges();
+
+                return CustomResponse("Serviço deletado com sucesso");
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao deletar o serviço, contate o suporte.");
+        }
+
+        [Authorize]
+        [HttpPut("service-modify")]
+        public async Task<ActionResult> ServiceModifyByID([FromQuery] string idServico, [FromBody] ServicoUpdateViewModel request)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var servicoExistente = _dbContext.Find<Servico>(Guid.Parse(idServico));
+
+                if (servicoExistente == null)
+                {
+                    ErrorProcess("Serviço inexistente!");
+                    return CustomResponse();
+                }
+
+                servicoExistente.Titulo = request.Titulo;
+                servicoExistente.Local = request.Local;
+                servicoExistente.Descricao = request.Descricao;
+                servicoExistente.TipoServico = request.TipoServico;
+
+                _dbContext.Update(user);
+                _dbContext.SaveChanges();
+
+                return CustomResponse("Serviço alterado com Sucesso!");
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao alterar o serviço, contate o suporte.");
+        }
+
+        [Authorize]
+        [HttpPut("service-apply")]
+        public async Task<ActionResult> ServiceApplyByID([FromQuery] string idServico)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var servicoExistente = _dbContext.Find<Servico>(Guid.Parse(idServico));
+
+                if (servicoExistente == null)
+                {
+                    ErrorProcess("Serviço inexistente!");
+                    return CustomResponse();
+                }
+                servicoExistente.UsuarioPrestadorCPF = user.Documento;
+
+                _dbContext.Update(user);
+                _dbContext.SaveChanges();
+
+                return CustomResponse("Candidatura aplicada com Sucesso!");
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao alterar o serviço, contate o suporte.");
+        }
+
+        [Authorize]
+        [HttpPut("service-unapply")]
+        public async Task<ActionResult> ServiceUnApplyByID([FromQuery] string idServico)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var servicoExistente = _dbContext.Find<Servico>(Guid.Parse(idServico));
+
+                if (servicoExistente == null)
+                {
+                    ErrorProcess("Serviço inexistente!");
+                    return CustomResponse();
+                }
+
+                if(servicoExistente.UsuarioPrestadorCPF == user.Documento)
+                {
+                    servicoExistente.UsuarioPrestadorCPF = null;
+                }
+                else
+                {
+                    ErrorProcess("Serviço sendo realizado por outro prestador!");
+                    return CustomResponse();
+                }
+
+
+                _dbContext.Update(user);
+                _dbContext.SaveChanges();
+
+                return CustomResponse("Candidatura aplicada com Sucesso!");
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao alterar o serviço, contate o suporte.");
         }
 
         [HttpGet("service-types")]
