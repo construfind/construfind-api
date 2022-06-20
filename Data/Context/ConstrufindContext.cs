@@ -57,7 +57,8 @@ namespace ConstruFindAPI.Data.Context
             builder.Entity<Servico>()
                    .HasOne<Usuario>(s => s.UsuarioContratante)
                    .WithMany(g => g.Servicos)
-                   .HasForeignKey(s => s.UsuarioContratanteForeignID);
+                   .HasForeignKey(s => s.UsuarioContratanteForeignID)
+                   .OnDelete(DeleteBehavior.Cascade);
         }
 
         public DbSet<Usuario> Usuarios { get; set; }
