@@ -129,7 +129,43 @@ namespace ConstruFindAPI.API.Controllers
 
                 var aux = _dbContext.Servicos.ToList();
 
-                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioContratante.Documento == user.Documento);
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioContratante.Email == user.Email);
+
+                if (servicosExistentes == null)
+                {
+                    ErrorProcess("Não existem serviços no momento, crie serviços para buscar profissionais!");
+                    return CustomResponse();
+                }
+
+                return CustomResponse(servicosExistentes);
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao buscar os serviços, contate o suporte.");
+        }
+
+        [Authorize]
+        [HttpGet("service-read-user-prestador")]
+        public async Task<ActionResult> ServiceReadByUserPrestador()
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var aux = _dbContext.Servicos.ToList();
+
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioPrestadorCPF == user.Documento);
 
                 if (servicosExistentes == null)
                 {
