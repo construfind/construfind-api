@@ -300,6 +300,54 @@ namespace ConstruFindAPI.API.Controllers
             return CustomResponse("Erro interno ao alterar o serviço, contate o suporte.");
         }
 
+        [Authorize]
+        [HttpPut("service-unapply")]
+        public async Task<ActionResult> ServiceUnApplyByID([FromQuery] string idServico)
+        {
+            if (!ModelState.IsValid) return CustomResponse(ModelState);
+
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(User.FindFirst(ClaimTypes.Email).Value);
+
+                if (user is null)
+                {
+                    ErrorProcess("Usuário inexistente com esse Email.");
+                    return CustomResponse();
+                }
+
+                var servicoExistente = _dbContext.Find<Servico>(Guid.Parse(idServico));
+
+                if (servicoExistente == null)
+                {
+                    ErrorProcess("Serviço inexistente!");
+                    return CustomResponse();
+                }
+
+                if(servicoExistente.UsuarioPrestadorCPF == user.Documento)
+                {
+                    servicoExistente.UsuarioPrestadorCPF = null;
+                }
+                else
+                {
+                    ErrorProcess("Serviço sendo realizado por outro prestador!");
+                    return CustomResponse();
+                }
+
+
+                _dbContext.Update(user);
+                _dbContext.SaveChanges();
+
+                return CustomResponse("Candidatura aplicada com Sucesso!");
+            }
+            catch (Exception ex)
+            {
+                ErrorProcess(ex.Message);
+            }
+
+            return CustomResponse("Erro interno ao alterar o serviço, contate o suporte.");
+        }
+
         [HttpGet("service-types")]
         public ActionResult ServiceTypes([FromRoute] string cpf)
         {
