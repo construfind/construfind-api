@@ -207,9 +207,15 @@ namespace ConstruFindAPI.API.Controllers
                 return CustomResponse();
             }
 
-            var servicosUsuario = _dbContext.Servicos.Where(x => x.UsuarioContratante.Documento == user.Documento);
+            var servicosUsuarioContratante = _dbContext.Servicos.Where(x => x.UsuarioContratante.Documento == user.Documento);
 
-            _dbContext.RemoveRange(servicosUsuario);
+            _dbContext.RemoveRange(servicosUsuarioContratante);
+
+            var servicosUsuarioPrestador = _dbContext.Servicos.Where(x => x.UsuarioPrestadorCPF == user.Documento).ToList();
+
+            servicosUsuarioPrestador.ForEach(x => { x.UsuarioPrestadorCPF = null; });
+
+            _dbContext.UpdateRange(servicosUsuarioPrestador);
             _dbContext.SaveChanges();
 
             var res = await _userManager.DeleteAsync(user);
