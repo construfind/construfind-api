@@ -129,7 +129,7 @@ namespace ConstruFindAPI.API.Controllers
 
                 var aux = _dbContext.Servicos.ToList();
 
-                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioContratante.Email == user.Email);
+                var servicosExistentes = _dbContext.Servicos.ToList().Where(x => x.UsuarioContratante.Email == user.Email).ToList();
 
                 if (servicosExistentes == null)
                 {
